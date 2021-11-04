@@ -37,8 +37,7 @@ def size_n():
             print("Please enter a positive integer.")
             continue
     return n
-#n = 10
-
+    
 # Hull Input -- Contains randomly generated Points within the unit square.
 hull_input = []
 
