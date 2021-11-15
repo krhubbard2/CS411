@@ -25,7 +25,7 @@ def generate_total_hands(deck):
 # FIXME:
 def generate_total_replacement_hands(hand):
     deck = Deck()
-    deck.remove(hand)
+    deck.remove(hand) ## OR: If card in hand -> skip
     total_replacements = [hand]
     deck.print()
     total = len(deck.cards)
