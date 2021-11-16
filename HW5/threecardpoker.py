@@ -22,13 +22,21 @@ def generate_total_hands(deck):
         raise ValueError("Error generating total number of hands")
     return total_hands
 
-def generate_total_replacement_hands(hand):
+def generate_replacement_hands(hand, cardPos):
     deck = Deck()
     deck.remove(hand)
-    total_replacements = [hand]
-
-    
-    return
+    replacement_hands = []
+    for i in range(49):
+        # Replacing card 1
+        if cardPos == 1:
+            replacement_hands.append(Hand(deck.cards[i], hand.hand[1], hand.hand[2]))
+        # Replacing card 2
+        if cardPos == 2:
+            replacement_hands.append(Hand(hand.hand[0], deck.cards[i], hand.hand[2]))
+        # Replacing card 3
+        if cardPos == 3:
+            replacement_hands.append(Hand(hand.hand[0]. hand.hand[1], deck.cards[i]))
+    return replacement_hands
 
 # Returns true if hand contains straight flush
 # Straight Flush -- 3 suited in a sequence

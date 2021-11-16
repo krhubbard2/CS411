@@ -9,8 +9,8 @@
 import texttable as tt # for use of texttable to print Return Table
 
 from threecardpoker import (
+    generate_replacement_hands,
     generate_total_hands,
-    generate_total_replacement_hands,
     straight_flush,
     three_of_a_kind,
     straight,
@@ -31,7 +31,6 @@ def returnRate(probability, payout, bidAmount):
 
 def bidGrab():
     bid = "Wrong"
-
     while bid.isdigit() == False:
         bid = input("Please enter bid amount (integers only): ")
 
@@ -135,4 +134,8 @@ c2 = Card(12, "Diamonds")
 c3 = Card(1, "Hearts")
 hand = Hand(c1, c2, c3)
 hand.print()
-generate_total_replacement_hands(hand)
+
+replacement_hands = generate_replacement_hands(hand, 1)
+print(len(replacement_hands))
+for i in range(len(replacement_hands)):
+    replacement_hands[i].print()
