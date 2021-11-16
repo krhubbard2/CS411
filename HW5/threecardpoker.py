@@ -56,6 +56,7 @@ def returnRate(probability, payout, bidAmount):
     rate = (payout * probability) / bidAmount
     return rate
 
+# Computes the frequency of straight flushes in given list
 def frequencySF(total_hands):
     totalSF = 0
     for i in range(len(total_hands)):           
@@ -63,6 +64,7 @@ def frequencySF(total_hands):
             totalSF += 1
     return totalSF
 
+# Computes the frequency of 3 of a kind in given list
 def frequency3K(total_hands):
     total3 = 0
     for i in range(len(total_hands)):
@@ -70,6 +72,7 @@ def frequency3K(total_hands):
             total3 += 1
     return total3
 
+# Computes the frequency of straights in given list
 def frequencyS(total_hands):
     totalStraight = 0
     for i in range(len(total_hands)):
@@ -77,6 +80,7 @@ def frequencyS(total_hands):
             totalStraight += 1
     return totalStraight
 
+# Computes the frequency of flushes in given list
 def frequencyF(total_hands):
     totalFlush = 0
     for i in range(len(total_hands)):
@@ -84,6 +88,7 @@ def frequencyF(total_hands):
             totalFlush += 1
     return totalFlush
 
+# Computes the frequency of pairs in given list
 def frequencyP(total_hands):
     totalPair = 0
     for i in range(len(total_hands)):
@@ -91,13 +96,11 @@ def frequencyP(total_hands):
             totalPair += 1
     return totalPair
 
-# High Card (all remaining hands after removal of higher scoring hands)   
+# Computes frequency of high cards (all remaining hands after removal of higher scoring hands) in a given list
 def frequencyH(total_hands, freqSF, freq3K, freqS, freqF, freqP):
     totalHigh = len(total_hands)
     totalHigh -= freqSF + freq3K + freqS + freqF + freqP
     return totalHigh
-
-
 
 # Generate total amount of possible hands
 # Hand contains 3 cards, no repeated cards, repeated hands in different order OK.
@@ -113,6 +116,8 @@ def generate_total_hands(deck):
         raise ValueError("Error generating total number of hands")
     return total_hands
 
+# Generate total amount of possible withs with a perfect swap
+# A perfect swap is the highest expected value of every draw possibility
 def generate_total_hands_with_perfect_play(deck, payoutList, bidAmount):
     total_hands_with_swap = generate_total_hands(deck)
     for i in range(len(total_hands_with_swap)):
@@ -121,6 +126,8 @@ def generate_total_hands_with_perfect_play(deck, payoutList, bidAmount):
             total_hands_with_swap.append(x)
     return total_hands_with_swap
 
+# Returns a list of replacement hands -- list will contain 49 hands (number of replacement hands possible)
+# For use in findPerfectPlay()
 def generate_replacement_hands(hand, cardPos):
     deck = Deck()
     deck.remove(hand)
@@ -137,11 +144,13 @@ def generate_replacement_hands(hand, cardPos):
             replacement_hands.append(Hand(hand.hand[0], hand.hand[1], deck.cards[i]))
     return replacement_hands
 
-# EV = profit * probability 
+# Computes total return (E(X))
 def totalReturn(straightFlushReturn, threeKindReturn, straightReturn, flushReturn, pairReturn, highReturn, bidAmount):
     totalRet = ((((straightFlushReturn + threeKindReturn + straightReturn + flushReturn + pairReturn + highReturn) / bidAmount) * 100) * bidAmount)
     return totalRet
 
+# Finds the perfect play (greatest return value) in a given hand
+# Returns current hand if hold is highest expected value, otherwise returns all 49 possible hands in the perfect play
 def findPerfectPlay(hand, payoutList, bidAmount):
     # Compute expected value if replacing C1
     replacement_options_c1 = generate_replacement_hands(hand, 1)
@@ -155,10 +164,9 @@ def findPerfectPlay(hand, payoutList, bidAmount):
     replacement_options_c3 = generate_replacement_hands(hand, 3)
     c3ExpectedValue = expectedValue(replacement_options_c3, payoutList, bidAmount)
 
-    # Compute expected value if holding currennt hand
+    # Compute expected value if holding current hand
     holdHand = [hand]
     holdExpectedValue = expectedValue(holdHand, payoutList, bidAmount)
-
 
     # RETURN Best return value hands
     if max(c1ExpectedValue, c2ExpectedValue, c3ExpectedValue, holdExpectedValue) == c1ExpectedValue:
@@ -170,6 +178,9 @@ def findPerfectPlay(hand, payoutList, bidAmount):
     elif max(c1ExpectedValue, c2ExpectedValue, c3ExpectedValue, holdExpectedValue) == holdExpectedValue:
         return holdHand
 
+# Computes total return
+# NOTE: This code is also used in main, but can't be used as the function in main as the texttable prints out variables which are mid steps in parts of this equation.
+# For use in findPerfectPlay
 def expectedValue(total_hands, payoutList, bidAmount):
 
     # Straight flush
