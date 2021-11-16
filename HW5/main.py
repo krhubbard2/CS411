@@ -1,6 +1,6 @@
 # Kelby Hubbard
 # Started: 2021-11-12
-# Updated: 2021-11-12
+# Updated: 2021-11-15
 # CS411 HW5 -- HW3 w/ card replacement
 # main.py
 
@@ -8,27 +8,8 @@
 
 import texttable as tt # for use of texttable to print Return Table
 
-from threecardpoker import (
-    frequency3K,
-    frequencySF,
-    generate_replacement_hands,
-    generate_total_hands,
-    straight_flush,
-    three_of_a_kind,
-    straight,
-    flush,
-    pair,
-    probability,
-    returnRate,
-    frequencySF,
-    frequency3K,
-    frequencyS,
-    frequencyF,
-    frequencyP,
-    frequencyH,
-)
 from pokermodule import Deck, Hand, Card
-
+from threecardpoker import * 
 
 def bidGrab():
     bid = "Wrong"
@@ -114,10 +95,10 @@ for row in zip(handsTable,freq,prob,payout,returns):
 s = tab.draw()
 print (s)
 
-c1 = Card(4, "Spades")
-c2 = Card(12, "Diamonds")
-c3 = Card(1, "Hearts")
-hand = Hand(c1, c2, c3)
-hand.print()
+# c1 = Card(4, "Spades")
+# c2 = Card(12, "Diamonds")
+# c3 = Card(1, "Hearts")
+# hand = Hand(c1, c2, c3)
+# hand.print()
 
-replacement_hands = generate_replacement_hands(hand, 1)
+# replacement_hands = generate_replacement_hands(hand, 1)

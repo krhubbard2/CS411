@@ -1,6 +1,6 @@
 # Kelby Hubbard
 # Started: 2021-11-12
-# Updated: 2021-11-12
+# Updated: 2021-11-15
 # CS411 HW5 -- HW3 w/ card replacement
 # pokermodule.py
 
