@@ -119,6 +119,7 @@ print("Computing HW5 Probability and Return Table based on a bid amount of ${} w
 print("Generating all hands possible with perfect swap.")
 total_hands_with_swap = generate_total_hands_with_perfect_play(deck, payoutList, bidAmount)
 totalHandSwapCount = len(total_hands_with_swap)
+print("Done.\n Generating frequencies, probabilities, and returns.")
 
 # Straight Flush with perfect play
 totalSwapSF = frequencySF(total_hands_with_swap)
