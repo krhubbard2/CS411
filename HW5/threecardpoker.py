@@ -124,9 +124,69 @@ def generate_replacement_hands(hand, cardPos):
             replacement_hands.append(Hand(hand.hand[0], deck.cards[i], hand.hand[2]))
         # Replacing card 3
         if cardPos == 3:
-            replacement_hands.append(Hand(hand.hand[0]. hand.hand[1], deck.cards[i]))
+            replacement_hands.append(Hand(hand.hand[0], hand.hand[1], deck.cards[i]))
     return replacement_hands
 
-def determinePerfectPlay(hand):
+# EV = profit * probability 
+def totalReturn(straightFlushReturn, threeKindReturn, straightReturn, flushReturn, pairReturn, highReturn, bidAmount):
+    totalRet = ((((straightFlushReturn + threeKindReturn + straightReturn + flushReturn + pairReturn + highReturn) / bidAmount) * 100) * bidAmount)
+    return totalRet
 
-    return
+def findPerfectPlay(hand, payoutList, bidAmount):
+    # Compute expected value if replacing C1
+    replacement_options_c1 = generate_replacement_hands(hand, 1)
+    c1ExpectedValue = expectedValue(replacement_options_c1, payoutList, bidAmount)
+    print("Expected value for C1: {}".format(c1ExpectedValue))
+    
+    # Compute expected value if replacing C2
+    replacement_options_c2 = generate_replacement_hands(hand, 2)
+    c2ExpectedValue = expectedValue(replacement_options_c2, payoutList, bidAmount)
+    print("Expected value for C2: {}".format(c2ExpectedValue))
+
+    # Compute expected value if replacing C3
+    replacement_options_c3 = generate_replacement_hands(hand, 3)
+    c3ExpectedValue = expectedValue(replacement_options_c3, payoutList, bidAmount)
+    print("Expected value for C3: {}".format(c3ExpectedValue))
+
+    # Compute expected value if holding currennt hand
+    holdHand = [hand]
+    holdExpectedValue = expectedValue(holdHand, payoutList, bidAmount)
+    print("Expected value for hold: {}".format(holdExpectedValue))
+
+def expectedValue(total_hands, payoutList, bidAmount):
+
+    # Straight flush
+    totalSF = frequencySF(total_hands)
+    straightFlushProbability = probability(totalSF, len(total_hands))
+    straightFlushReturn = returnRate(straightFlushProbability, payoutList[0], bidAmount)
+
+    # 3 of a kind
+    total3 = frequency3K(total_hands)
+    threeKindProbability = probability(total3, len(total_hands))
+    threeKindReturn = returnRate(threeKindProbability, payoutList[1], bidAmount)
+
+    # Straight
+    totalStraight = frequencyS(total_hands)
+    totalStraight -= totalSF
+    straightProbability = probability(totalStraight, len(total_hands))
+    straightReturn = returnRate(straightProbability, payoutList[2], bidAmount)
+
+    # Flush
+    totalFlush = frequencyF(total_hands)
+    totalFlush -= totalSF
+    flushProbability = probability(totalFlush, len(total_hands))
+    flushReturn = returnRate(flushProbability, payoutList[3], bidAmount)
+
+    # Pairs
+    totalPair = frequencyP(total_hands)
+    totalPair -= total3
+    pairProbability = probability(totalPair, len(total_hands))
+    pairReturn = returnRate(pairProbability, payoutList[4], bidAmount)
+
+    # High Card (all remaining hands after removal of higher scoring hands)
+    totalHigh = frequencyH(total_hands, totalSF, total3, totalStraight, totalFlush, totalPair)
+    highProbability = probability(totalHigh, len(total_hands))
+    highReturn = returnRate(highProbability, payoutList[5], bidAmount)
+
+    totalRet = totalReturn(straightFlushReturn, threeKindReturn, straightReturn, flushReturn, pairReturn, highReturn, bidAmount)
+    return totalRet

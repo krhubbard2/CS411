@@ -75,8 +75,7 @@ highProbability = probability(totalHigh, totalHandCount)
 highReturn = returnRate(highProbability, highPayout, bidAmount)
 
 # Total Return % = All returns added together
-totalReturn = (((straightFlushReturn + threeKindReturn + straightReturn + flushReturn + pairReturn + highReturn) / bidAmount) * 100) * bidAmount
-# print("Total Return: {}%".format(totalReturn))
+totalRet = totalReturn(straightFlushReturn, threeKindReturn, straightReturn, flushReturn, pairReturn, highReturn, bidAmount)
 
 # Return Table (using texttable)
 tab = tt.Texttable()
@@ -86,7 +85,7 @@ handsTable = ['Straight Flush', 'Three of a Kind', 'Straight', 'Flush', 'Pair', 
 freq = [totalSF, total3, totalStraight, totalFlush, totalPair, totalHigh, totalHandCount]
 prob = [straightFlushProbability, threeKindProbability, straightProbability, flushProbability, pairProbability, highProbability, '100.00']
 payout = [straightFlushPayout, threeKindPayout, straightPayout, flushPayout, pairPayout, highPayout, '']
-returns = [straightFlushReturn, threeKindReturn, straightReturn, flushReturn, pairReturn, highReturn, totalReturn]
+returns = [straightFlushReturn, threeKindReturn, straightReturn, flushReturn, pairReturn, highReturn, totalRet]
 
 tab.set_precision(4) # Probability differes to the 4th decimal place
 for row in zip(handsTable,freq,prob,payout,returns):
@@ -95,10 +94,11 @@ for row in zip(handsTable,freq,prob,payout,returns):
 s = tab.draw()
 print (s)
 
-# c1 = Card(4, "Spades")
-# c2 = Card(12, "Diamonds")
-# c3 = Card(1, "Hearts")
-# hand = Hand(c1, c2, c3)
-# hand.print()
+c1 = Card(6, "Spades")
+c2 = Card(7, "Spades")
+c3 = Card(10, "Hearts")
+hand = Hand(c1, c2, c3)
+hand.print()
+findPerfectPlay(hand, payoutList, bidAmount)
 
 # replacement_hands = generate_replacement_hands(hand, 1)
