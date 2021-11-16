@@ -34,12 +34,11 @@ payoutList = [straightFlushPayout, threeKindPayout, straightPayout, flushPayout,
 
 # Generate Deck
 deck = Deck()
-print("Generating all possible hands")
 # Generate total hands possible
 total_hands = generate_total_hands(deck)
 totalHandCount = len(total_hands)
 
-print("Computing Probability and Return Table based on a bid amount of ${}.".format(bidAmount))
+print("Computing ORIGINAL Probability and Return Table based on a bid amount of ${}.".format(bidAmount))
 
 # Straight Flush
 totalSF = frequencySF(total_hands)
@@ -96,9 +95,55 @@ print (s)
 
 c1 = Card(6, "Spades")
 c2 = Card(7, "Spades")
-c3 = Card(10, "Hearts")
+c3 = Card(8, "Hearts")
 hand = Hand(c1, c2, c3)
 hand.print()
 findPerfectPlay(hand, payoutList, bidAmount)
 
 # replacement_hands = generate_replacement_hands(hand, 1)
+
+
+print("Computing HW5 Probability and Return Table based on a bid amount of ${} with the perfect play.".format(bidAmount))
+
+print("Generating all hands possible with perfect swap.")
+total_hands_with_swap = generate_total_hands_with_perfect_play(deck, payoutList, bidAmount)
+totalHandSwapCount = len(total_hands_with_swap)
+print("Total hands with perfect swap: {}".format(totalHandSwapCount)) # 6078192... is this right?
+
+print("Finding total Frequency of SF with swaps")
+# Straight Flush
+totalSwapSF = frequencySF(total_hands_with_swap)
+# straightFlushSwapProbability = probability(totalSwapSF, totalHandSwapCount)
+# straightFlushSwapReturn = returnRate(straightFlushSwapProbability, straightFlushPayout, bidAmount)
+print("Total Frequency of SF with swaps: {}".format(totalSwapSF)) #28080... is this right?
+
+# # 3 of a kind
+# total3 = frequency3K(total_hands)
+# threeKindProbability = probability(total3, totalHandCount)
+# threeKindReturn = returnRate(threeKindProbability, threeKindPayout, bidAmount)
+
+# # Straight
+# totalStraight = frequencyS(total_hands)
+# totalStraight -= totalSF
+# straightProbability = probability(totalStraight, totalHandCount)
+# straightReturn = returnRate(straightProbability, straightPayout, bidAmount)
+
+# # Flush
+# totalFlush = frequencyF(total_hands)
+# totalFlush -= totalSF
+# flushProbability = probability(totalFlush, totalHandCount)
+# flushReturn = returnRate(flushProbability, flushPayout, bidAmount)
+
+# # Pairs
+# totalPair = frequencyP(total_hands)
+# totalPair -= total3
+# pairProbability = probability(totalPair, totalHandCount)
+# pairReturn = returnRate(pairProbability, pairPayout, bidAmount)
+
+# # High Card (all remaining hands after removal of higher scoring hands)
+# totalHigh = frequencyH(total_hands, totalSF, total3, totalStraight, totalFlush, totalPair)
+# highProbability = probability(totalHigh, totalHandCount)
+# highReturn = returnRate(highProbability, highPayout, bidAmount)
+
+# # Total Return % = All returns added together
+# totalRet = totalReturn(straightFlushReturn, threeKindReturn, straightReturn, flushReturn, pairReturn, highReturn, bidAmount)

@@ -58,7 +58,7 @@ def returnRate(probability, payout, bidAmount):
 
 def frequencySF(total_hands):
     totalSF = 0
-    for i in range(len(total_hands)):
+    for i in range(len(total_hands)):           
         if straight_flush(total_hands[i]) == True:
             totalSF += 1
     return totalSF
@@ -97,6 +97,8 @@ def frequencyH(total_hands, freqSF, freq3K, freqS, freqF, freqP):
     totalHigh -= freqSF + freq3K + freqS + freqF + freqP
     return totalHigh
 
+
+
 # Generate total amount of possible hands
 # Hand contains 3 cards, no repeated cards, repeated hands in different order OK.
 def generate_total_hands(deck):
@@ -110,6 +112,14 @@ def generate_total_hands(deck):
     if sum != 132600: 
         raise ValueError("Error generating total number of hands")
     return total_hands
+
+def generate_total_hands_with_perfect_play(deck, payoutList, bidAmount):
+    total_hands_with_swap = generate_total_hands(deck)
+    for i in range(len(total_hands_with_swap)):
+        temp = findPerfectPlay(total_hands_with_swap[i], payoutList, bidAmount)
+        for x in temp:
+            total_hands_with_swap.append(x)
+    return total_hands_with_swap
 
 def generate_replacement_hands(hand, cardPos):
     deck = Deck()
@@ -136,22 +146,29 @@ def findPerfectPlay(hand, payoutList, bidAmount):
     # Compute expected value if replacing C1
     replacement_options_c1 = generate_replacement_hands(hand, 1)
     c1ExpectedValue = expectedValue(replacement_options_c1, payoutList, bidAmount)
-    print("Expected value for C1: {}".format(c1ExpectedValue))
     
     # Compute expected value if replacing C2
     replacement_options_c2 = generate_replacement_hands(hand, 2)
     c2ExpectedValue = expectedValue(replacement_options_c2, payoutList, bidAmount)
-    print("Expected value for C2: {}".format(c2ExpectedValue))
-
+    
     # Compute expected value if replacing C3
     replacement_options_c3 = generate_replacement_hands(hand, 3)
     c3ExpectedValue = expectedValue(replacement_options_c3, payoutList, bidAmount)
-    print("Expected value for C3: {}".format(c3ExpectedValue))
 
     # Compute expected value if holding currennt hand
     holdHand = [hand]
     holdExpectedValue = expectedValue(holdHand, payoutList, bidAmount)
-    print("Expected value for hold: {}".format(holdExpectedValue))
+
+
+    # RETURN Best return value hands
+    if max(c1ExpectedValue, c2ExpectedValue, c3ExpectedValue, holdExpectedValue) == c1ExpectedValue:
+        return replacement_options_c1
+    elif max(c1ExpectedValue, c2ExpectedValue, c3ExpectedValue, holdExpectedValue) == c2ExpectedValue:
+        return replacement_options_c2
+    elif max(c1ExpectedValue, c2ExpectedValue, c3ExpectedValue, holdExpectedValue) == c3ExpectedValue:
+        return replacement_options_c3
+    elif max(c1ExpectedValue, c2ExpectedValue, c3ExpectedValue, holdExpectedValue) == holdExpectedValue:
+        return holdHand
 
 def expectedValue(total_hands, payoutList, bidAmount):
 
