@@ -182,7 +182,6 @@ def findPerfectPlay(hand, payoutList, bidAmount):
 # NOTE: This code is also used in main, but can't be used as the function in main as the texttable prints out variables which are mid steps in parts of this equation.
 # For use in findPerfectPlay
 def expectedValue(total_hands, payoutList, bidAmount):
-
     # Straight flush
     totalSF = frequencySF(total_hands)
     straightFlushProbability = probability(totalSF, len(total_hands))
