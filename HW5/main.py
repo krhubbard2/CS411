@@ -130,8 +130,9 @@ for row in zip(handsTable,freq,prob,payout,returns):
 s = tab.draw()
 print (s)
 
-c1 = Card(1, "Spades")
+c1 = Card(4, "Spades")
 c2 = Card(12, "Diamonds")
-c3 = Card(13, "Clubs")
+c3 = Card(1, "Hearts")
 hand = Hand(c1, c2, c3)
+hand.print()
 generate_total_replacement_hands(hand)

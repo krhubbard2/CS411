@@ -22,14 +22,12 @@ def generate_total_hands(deck):
         raise ValueError("Error generating total number of hands")
     return total_hands
 
-# FIXME:
 def generate_total_replacement_hands(hand):
     deck = Deck()
-    deck.remove(hand) ## OR: If card in hand -> skip
+    deck.remove(hand)
     total_replacements = [hand]
-    deck.print()
-    total = len(deck.cards)
-    print(total)
+
+    
     return
 
 # Returns true if hand contains straight flush

@@ -57,6 +57,10 @@ class Hand:
     def sort(self):
         self.hand.sort(key = attrgetter('rank', 'suit'))
 
+    # For use in Deck::remove
+    def sortBySuit(self):
+        self.hand.sort(key = attrgetter('suit', 'rank'))
+
     def print(self):
         print("Your hand contains:")
         self.hand[0].print()
@@ -78,11 +82,11 @@ class Deck:
     
     # Removes current hand from deck
     def remove(self, hand):
+        hand.sortBySuit()
         for i in range(3):
-            # FIXME:
             del self.cards[hand.hand[i].cardPlace() - i]
+        hand.sort()
             
-    
     def print(self):
         for c in self.cards:
             c.print()
