@@ -114,7 +114,7 @@ flushSwapPayout = 3 * bidAmount
 pairSwapPayout = 1 * bidAmount
 highSwapPayout = 0
 
-print("Computing HW5 Probability and Return Table based on a bid amount of ${} with the one card swap allowed and perfect play assumed.".format(bidAmount))
+print("Computing HW5 Probability and Return Table based on a bid amount of ${} with one card swap allowed and perfect play assumed.".format(bidAmount))
 
 print("Generating all hands possible with perfect swap.")
 total_hands_with_swap = generate_total_hands_with_perfect_play(deck, payoutList, bidAmount)
