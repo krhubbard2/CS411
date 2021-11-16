@@ -9,6 +9,8 @@
 import texttable as tt # for use of texttable to print Return Table
 
 from threecardpoker import (
+    frequency3K,
+    frequencySF,
     generate_replacement_hands,
     generate_total_hands,
     straight_flush,
@@ -16,18 +18,17 @@ from threecardpoker import (
     straight,
     flush,
     pair,
+    probability,
+    returnRate,
+    frequencySF,
+    frequency3K,
+    frequencyS,
+    frequencyF,
+    frequencyP,
+    frequencyH,
 )
 from pokermodule import Deck, Hand, Card
 
-# Computes probability (Outcomes / Total Outcomes)
-def probability(outcomes, totalOutcomes):
-    prob = outcomes / totalOutcomes
-    return prob
-
-# Computes return rate (Payout * Probability)
-def returnRate(probability, payout, bidAmount):
-    rate = (payout * probability) / bidAmount
-    return rate
 
 def bidGrab():
     bid = "Wrong"
@@ -60,51 +61,35 @@ totalHandCount = len(total_hands)
 print("Computing Probability and Return Table based on a bid amount of ${}.".format(bidAmount))
 
 # Straight Flush
-totalSF = 0
-for i in range(totalHandCount):
-    if straight_flush(total_hands[i]) == True:
-        totalSF += 1
+totalSF = frequencySF(total_hands)
 straightFlushProbability = probability(totalSF, totalHandCount)
 straightFlushReturn = returnRate(straightFlushProbability, straightFlushPayout, bidAmount)
 
 # 3 of a kind
-total3 = 0
-for i in range(totalHandCount):
-    if three_of_a_kind(total_hands[i]) == True:
-        total3 += 1
+total3 = frequency3K(total_hands)
 threeKindProbability = probability(total3, totalHandCount)
 threeKindReturn = returnRate(threeKindProbability, threeKindPayout, bidAmount)
 
 # Straight
-totalStraight = 0
-for i in range(totalHandCount):
-    if straight(total_hands[i]) == True:
-        totalStraight += 1
+totalStraight = frequencyS(total_hands)
 totalStraight -= totalSF
 straightProbability = probability(totalStraight, totalHandCount)
 straightReturn = returnRate(straightProbability, straightPayout, bidAmount)
 
 # Flush
-totalFlush = 0
-for i in range(totalHandCount):
-    if flush(total_hands[i]) == True:
-        totalFlush += 1
+totalFlush = frequencyF(total_hands)
 totalFlush -= totalSF
 flushProbability = probability(totalFlush, totalHandCount)
 flushReturn = returnRate(flushProbability, flushPayout, bidAmount)
 
 # Pairs
-totalPair = 0
-for n in range(totalHandCount):
-    if pair(total_hands[n]) == True:
-        totalPair += 1
+totalPair = frequencyP(total_hands)
 totalPair -= total3
 pairProbability = probability(totalPair, totalHandCount)
 pairReturn = returnRate(pairProbability, pairPayout, bidAmount)
 
 # High Card (all remaining hands after removal of higher scoring hands)
-totalHigh = 132600
-totalHigh -= totalSF + total3 + totalStraight + totalFlush + totalPair
+totalHigh = frequencyH(total_hands, totalSF, total3, totalStraight, totalFlush, totalPair)
 highProbability = probability(totalHigh, totalHandCount)
 highReturn = returnRate(highProbability, highPayout, bidAmount)
 
@@ -136,6 +121,3 @@ hand = Hand(c1, c2, c3)
 hand.print()
 
 replacement_hands = generate_replacement_hands(hand, 1)
-print(len(replacement_hands))
-for i in range(len(replacement_hands)):
-    replacement_hands[i].print()
